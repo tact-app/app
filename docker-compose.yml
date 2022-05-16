@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+
+  frontend:
+    image: octopot/tact-app-frontend:latest           # Docker Hub
+#    image: ghcr.io/tact-app/frontend:latest          # GitHub Registry
+#    image: quay.io/octopot/tact-app-frontend:latest  # Quay Registry
+    ports:
+      - "3000:3000"

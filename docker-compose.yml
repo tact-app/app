@@ -2,9 +2,23 @@ version: "3"
 
 services:
 
-  frontend:
-    image: octopot/tact-app-frontend:latest           # Docker Hub
-#    image: ghcr.io/tact-app/frontend:latest          # GitHub Registry
-#    image: quay.io/octopot/tact-app-frontend:latest  # Quay Registry
+  gate:
+    build: k8s/build/gate
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    restart: always
+    labels:
+      dev.okteto.com/auto-ingress: domain
+      dev.okteto.com/custom-domain: true
+      dev.okteto.com/domain: cloud.tact.run
+
+  web:
+    image: ghcr.io/tact-app/web:latest
+    # available images
+    # - octopot/tact-app-web:latest, Docker Hub
+    # - ghcr.io/tact-app/web:latest, GitHub Registry
+    # - quay.io/tact-app/web:latest, Quay Registry
     ports:
       - "3000:3000"

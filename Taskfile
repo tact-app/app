@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+
+[ "${BASH_VERSINFO:-0}" -ge 4 ] || {
+  echo "bash version 4 or higher is required" >&2
+  exit 1
+}
+
+set -euo pipefail
+
+setup() {
+  set_okteto_token false
+  env
+
+  tools okteto
+  okteto context use https://cloud.okteto.com
+
+  build --pull
+
+  local copied=false
+  command -v pbcopy >/dev/null && echo source bin/activate | pbcopy && copied=true
+  echo Run the next commands to complete setup:
+  printf '├─ source bin/activate\t- to activate virtual environment (copied to clipboard: %s)\n' $copied
+  printf '└─ run whoami \t\t- to show meta information about your environment\n'
+}
+
+set_okteto_token() { @store_token Okteto okteto.token 48 "${1:-true}"; }
+@store_token() {
+  local name="${1}" key="${2}" length="${3}" update="${4:-true}"
+
+  local token
+  echo Please enter "${name}" token:
+  read -rs token
+  token=${token## }
+  token=${token%% }
+
+  if [ "${#token}" -lt "${length}" ]; then
+    echo 'Token is invalid.'
+    return 1
+  fi
+  git config "${key}" "${token}"
+  echo 'Token saved.'
+
+  [ "${update}" != false ] && env || return 0
+}
+
+env() {
+  cat <<EOF >.env
+OKTETO_TOKEN=$(git config okteto.token)
+EOF
+}
+
+build() { compose build "${@}"; }
+start() { compose up -d; }
+
+# Example: run tools okteto
+tools() {
+  case "${1}" in
+  okteto)
+    local os arch bin src version=2.11.0
+    os=$(uname -s)
+    arch=$(uname -m) && arch=${arch/aarch64/arm64}
+    bin=$(echo bin/"${os}"/"${arch}" | tr '[:upper:]' '[:lower:]')
+    src=https://github.com/okteto/okteto/releases/download
+
+    mkdir -p "${bin}"
+    curl -sSfL "${src}/${version}/okteto-${os}-${arch}" -o "${bin}"/okteto
+    chmod +x "${bin}"/okteto
+    ;;
+  *)
+    (cd tools && "${@}")
+    ;;
+  esac
+}
+
+compose() { docker compose -p tact-app "${@}"; }
+
+_okteto=$(which okteto || true)
+okteto() {
+  [ -z "${_okteto}" ] && echo Please setup env and activate it. && return 1
+
+  local OKTETO_TOKEN
+  OKTETO_TOKEN=$(git config okteto.token)
+
+  local args=("${@}")
+  OKTETO_TOKEN="$(git config okteto.token)" _ "${_okteto}" "${args[@]}"
+}
+
+whoami() {
+  echo "You are $(git config user.name) <$(git config user.email)>"
+  echo "* Docker Compose ----------------------------------"
+  compose ls
+  echo "* Okteto ------------------------------------------"
+  okteto context
+}
+
+declare -A config
+config['dryrun']=false
+config['port']=3000 # TODO:debt customize it
+
+_() {
+  if ${config['dryrun']}; then
+    echo "${@}"
+    return
+  fi
+  trap 'echo "${@}"' ERR
+  "${@}"
+}
+@debug() { echo "${@}"; }
+@trace() { @debug "${@}" && "${@}"; }
+@error() { echo "${@}" >&2; }
+@fatal() { @error "${@}" && exit 1; }
+@usage() {
+  cat - <<EOF
+Usage: $0 <task> <args>
+Tasks:
+EOF
+  compgen -A function | grep -Ev '^(@|_)' | sort | cat -n
+}
+
+function @main() {
+  if [[ "${1:-}" =~ ^--dry-run|-d$ ]]; then
+    config['dryrun']=true
+    shift
+  fi
+  "${@:-@usage}"
+}
+
+@main "${@}"

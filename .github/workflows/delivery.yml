@@ -13,10 +13,11 @@ jobs:
       - uses: actions/checkout@v3
         with: { fetch-depth: 0 }
 
-      - uses: okteto/context@latest
-        with: { token: '${{ secrets.OKTETO_TOKEN }}' }
-      - uses: okteto/deploy-stack@latest
-        with: { build: true }
+      - run: |
+          alias run=./Taskfile
+          alias activate='source bin/activate'
+          git config okteto.token=${{ secrets.OKTETO_TOKEN }}
+          activate && run okteto deploy --build
 
   notify:
     runs-on: ubuntu-latest

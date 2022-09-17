@@ -14,7 +14,7 @@ Requirements:
 [Okteto]:         https://www.okteto.com/
 
 ```bash
-$ alias run='./Taskfile'
+$ alias run=./Taskfile
 $ alias activate='source bin/activate'
 $ activate && run setup
 

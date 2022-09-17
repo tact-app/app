@@ -52,6 +52,8 @@ EOF
 build() { compose build "${@}"; }
 start() { compose up -d; }
 
+publish() { okteto deploy --build; }
+
 # Example: run tools okteto
 tools() {
   case "${1}" in

@@ -14,10 +14,11 @@ jobs:
         with: { fetch-depth: 0 }
 
       - run: |
-          alias run=./Taskfile
-          alias activate='source bin/activate'
-          git config okteto.token=${{ secrets.OKTETO_TOKEN }}
-          activate && run okteto deploy --build
+          source bin/activate
+          git config okteto.token ${{ secrets.OKTETO_TOKEN }}
+          ./Taskfile tools okteto
+          ./Taskfile okteto context use https://cloud.okteto.com
+          ./Taskfile okteto deploy --build
 
   notify:
     runs-on: ubuntu-latest

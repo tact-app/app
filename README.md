@@ -7,7 +7,7 @@
 Requirements:
 
 - [Docker Desktop][Docker].
-- Tokens for
+- Access tokens for
   - [Okteto][]
 
 [Docker]:         https://www.docker.com/products/docker-desktop/

@@ -50,6 +50,11 @@ $ run compose down
 $ run compose --help
 ```
 
+Available Docker images:
+- ghcr.io/tact-app/web:latest, GitHub Registry
+- quay.io/tact-app/web:latest, Quay Registry
+- octopot/tact-app-web:latest, Docker Hub
+
 ### Okteto CLI
 **Useful:** [docs][Okteto CLI], [src](https://github.com/okteto/okteto)
 

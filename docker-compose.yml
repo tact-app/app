@@ -16,9 +16,15 @@ services:
 
   web:
     image: ghcr.io/tact-app/web:latest
-    # available images
-    # - octopot/tact-app-web:latest, Docker Hub
-    # - ghcr.io/tact-app/web:latest, GitHub Registry
-    # - quay.io/tact-app/web:latest, Quay Registry
     ports:
       - "3000:3000"
+
+  vault:
+    image: vault:latest
+    ports:
+      - "8200:8200"
+    volumes:
+      - vault:/vault/file
+
+volumes:
+  vault:

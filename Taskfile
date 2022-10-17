@@ -58,7 +58,7 @@ publish() { okteto deploy --build; }
 tools() {
   case "${1}" in
   okteto)
-    local os arch bin src version=2.13.0
+    local os arch bin src version=2.14.0
     os=$(uname -s)
     arch=$(uname -m) && arch=${arch/aarch64/arm64}
     bin=$(echo bin/"${os}"/"${arch}" | tr '[:upper:]' '[:lower:]')

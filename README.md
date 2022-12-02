@@ -1,6 +1,6 @@
-> # ⛹️‍♀️Tact
->
-> The next-generation Time Management Software and Work-Life Management Platform.
+# ⛹️‍♀️Tact.app
+
+The next-generation Time Management Software and Work-Life Management Platform.
 
 ## Quick start
 
@@ -75,6 +75,13 @@ it's substituted automatically under the hood.
 ## License
 
 GNU Affero General Public License v3.0 or later.
-See [COPYING](COPYING) to see the full text.
+See [LICENSE](LICENSE) to see the full text.
+
+We use [CLA assistant][] to sign copyright agreements while contributing.
+See [CLA][] to see the full text.
+
+[CLA]:                https://gist.github.com/kamilsk/44221b6834a6cdc273b5e3411224f8be
+[CLA assistant]:      https://cla-assistant.io/tact-app/app
+[CLA assistant.src]:  https://github.com/cla-assistant/cla-assistant
 
 <p align="right">made with ❤️ for everyone</p>

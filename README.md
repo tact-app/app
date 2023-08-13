@@ -1,4 +1,6 @@
-# ⛹️‍♀️Tact.app
+![Tact.app][social.preview]
+
+# 🤺 Tact.app
 
 The next-generation Time Management Software and Work-Life Management Platform.
 
@@ -15,10 +17,9 @@ Requirements:
 
 ```bash
 $ alias run=./Taskfile
-$ alias activate='source bin/activate'
-$ activate && run setup
-
-$ $(sleep 5; open http://localhost:3000) &; run start
+$ run setup
+$ run wait-for-it -q -w localhost:3000 -- open http://localhost:3000/ &
+$ run start
 ```
 
 ## Manage secrets
@@ -26,9 +27,8 @@ $ $(sleep 5; open http://localhost:3000) &; run start
 You can update tokens by the following commands
 
 ```bash
+$ run set_github_token
 $ run set_okteto_token
-
-$ run env # dump updated tokens into the .env file
 ```
 
 ## Tools
@@ -36,17 +36,13 @@ $ run env # dump updated tokens into the .env file
 ### Installation
 
 ```bash
-$ run tools okteto
-$ run whoami
+$ run tools install
 ```
 
 ### Docker Compose
-**Useful:** [docs][Docker Compose], [src](https://github.com/docker/compose)
+**Useful:** [docs][Docker Compose], [src](https://github.com/docker/compose).
 
 ```bash
-$ run compose up -d
-$ run compose down
-
 $ run compose --help
 ```
 
@@ -55,11 +51,18 @@ Available Docker images:
 - quay.io/tact-app/web:latest, Quay Registry
 - octopot/tact-app-web:latest, Docker Hub
 
-### Okteto CLI
-**Useful:** [docs][Okteto CLI], [src](https://github.com/okteto/okteto)
+### GitHub CLI
+**Useful:** [docs][GitHub CLI], [src](https://github.com/cli/cli).
 
 ```bash
-$ activate
+$ run gh help
+$ run @workflows
+```
+
+### Okteto CLI
+**Useful:** [docs][Okteto CLI], [src](https://github.com/okteto/okteto).
+
+```bash
 $ run okteto context use https://cloud.okteto.com
 $ run okteto up
 
@@ -70,6 +73,7 @@ You can avoid using the token parameter when working with these commands,
 it's substituted automatically under the hood.
 
 [Docker Compose]:   https://docs.docker.com/compose/reference/
+[GitHub CLI]:       https://cli.github.com/
 [Okteto CLI]:       https://www.okteto.com/docs/cloud/okteto-cli/
 
 ## License
@@ -85,3 +89,5 @@ See [CLA][] to see the full text.
 [CLA assistant.src]:  https://github.com/cla-assistant/cla-assistant
 
 <p align="right">made with ❤️ for everyone by <a href="https://www.octolab.org/">OctoLab</a></p>
+
+[social.preview]: https://cdn.octolab.org/tact/interface.png
